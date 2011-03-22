@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders
+package signalcollect.graphproviders
 
 import org.openrdf.query.BindingSet
 import org.openrdf.query.TupleQueryResult

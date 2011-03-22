@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders.synthetic
+package signalcollect.graphproviders.synthetic
 
 class FullyConnected(val vertices: Int) extends Traversable[(Int, Int)] {
 

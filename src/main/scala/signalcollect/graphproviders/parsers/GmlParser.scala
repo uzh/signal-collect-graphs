@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders
+package signalcollect.graphproviders
 
 import java.io.File
 import java.io.FileReader

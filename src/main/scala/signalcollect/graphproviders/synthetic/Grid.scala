@@ -17,29 +17,21 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders.synthetic
+package signalcollect.graphproviders.synthetic
 
-import scala.math._
-import scala.util.Random
-
-class LogNormal(vertices: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends Traversable[(Int, Int)] {
+class Grid(val width: Int, height: Int) extends Traversable[(Int, Int)] {
 
   def foreach[U](f: ((Int, Int)) => U) = {
-    val r = new Random(seed)
-    var i = 0
-    while (i < vertices) {
-      val from = i
-      val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
-      var j = 0
-      while (j < outDegree) {
-        val to = ((r.nextDouble * (vertices - 1))).round.toInt
-        if (from != to) {
-          f(from, to)
-          j += 1
-        }
-      }
-      i += 1
-    }
+	  val max = width*height
+	  for (n <- 1 to max) {
+	 	if (n + width <= max) {
+	 		f(n, n+width)
+	 		f(n+width, n)
+	 	}
+	 	if (n % height != 0) {
+	 		f(n, n+1)
+	 		f(n+1, n)
+	 	}
+	  }
   }
-
 }

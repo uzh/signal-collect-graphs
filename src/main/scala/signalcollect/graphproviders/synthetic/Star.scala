@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders.synthetic
+package signalcollect.graphproviders.synthetic
 
 class Star(val vertices: Int, symmetric: Boolean = false) extends Traversable[(Int, Int)] {
 

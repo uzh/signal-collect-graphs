@@ -17,12 +17,25 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders
+package signalcollect.graphproviders.synthetic
 
-trait SparqlAccessor {
-  def execute(query: String): Traversable[Bindings]
-}
+class BinaryTree(val vertices: Int, inverted: Boolean = false) extends Traversable[(Int, Int)] {
 
-trait Bindings {
-  def get(s: String): Option[String]
+  def foreach[U](f: ((Int, Int)) => U) = {
+    var i = 1
+    while (2 * i - 1 < vertices) {
+      if (inverted)
+        f((2 * i - 1, i - 1))
+      else
+        f((i - 1, 2 * i - 1))
+      if (2 * i < vertices) {
+        if (inverted)
+          f((2 * i, i - 1))
+        else
+          f((i - 1, 2 * i))
+      }
+
+      i += 1
+    }
+  }
 }

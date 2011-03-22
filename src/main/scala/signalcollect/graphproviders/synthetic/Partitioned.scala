@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders.synthetic
+package signalcollect.graphproviders.synthetic
 
 import scala.math._
 import scala.util.Random

@@ -17,7 +17,7 @@
  *  
  */
 
-package ch.uzh.ifi.ddis.signalcollect.graphproviders
+package signalcollect.graphproviders
 
 class SparqlTuples(
   db: SparqlAccessor,
