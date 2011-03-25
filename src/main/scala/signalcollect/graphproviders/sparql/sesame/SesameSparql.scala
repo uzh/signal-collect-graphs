@@ -32,7 +32,7 @@ class SesameSparql(serverUrl: String = "http://localhost:8080/openrdf-sesame", r
     repository = new HTTPRepository(serverUrl, repositoryString)
   else
     repository = new HTTPRepository(serverUrl)
-  if (repository == null)
+  if (repositoryString == null)
     repository.setPreferredTupleQueryResultFormat(TupleQueryResultFormat.SPARQL)
   else
     repository.setPreferredTupleQueryResultFormat(TupleQueryResultFormat.BINARY)
@@ -44,6 +44,28 @@ class SesameSparql(serverUrl: String = "http://localhost:8080/openrdf-sesame", r
     new SesameResultAdapter(tupleQuery.evaluate)
   }
 }
+
+
+//String endpointURL = "http://dbpedia.org/sparql";
+//HTTPRepository dbpediaEndpoint = 
+//         new HTTPRepository(endpointURL, "");
+//dbpediaEndpoint.initialize();
+//
+//RepositoryConnection conn = 
+//         dbpediaEndpoint.getConnection();
+//try {
+//  String sparqlQuery = 
+//         " SELECT * WHERE {?X ?P ?Y} LIMIT 10 ";
+//  TupleQuery query = conn.prepareTupleQuery(SPARQL, query);
+//  TupleQueryResult result = query.evaluate();
+//
+//  while (result.hasNext()) {
+//      ... // do something linked and open
+//  }
+//}
+//finally {
+//  conn.close();
+//}
 
 class SesameResultAdapter(val i: TupleQueryResult) extends Traversable[Bindings] {
   def foreach[U](f: (Bindings) => U) = while (i.hasNext) f(new SesameBindingsAdapter(i.next))
