@@ -25,7 +25,7 @@ import org.openrdf.query.QueryLanguage
 import org.openrdf.query.resultio.TupleQueryResultFormat
 import org.openrdf.repository.http.HTTPRepository
 
-class SesameSparql(serverUrl: String = "http://localhost:8080/openrdf-sesame", repositoryString: String = null) extends SparqlAccessor {
+class SesameSparql(serverUrl: String = "http://localhost:8080/openrdf-sesame", repositoryString: String = null) extends SparqlEndpoint {
 
   var repository: HTTPRepository = null
   if (repositoryString != null)
@@ -38,37 +38,18 @@ class SesameSparql(serverUrl: String = "http://localhost:8080/openrdf-sesame", r
     repository.setPreferredTupleQueryResultFormat(TupleQueryResultFormat.BINARY)
   repository.initialize
 
-  override def execute(query: String): Traversable[Bindings] = {
+  override def execute(query: String): Iterable[Bindings] = {
     val connection = repository.getConnection
     val tupleQuery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query)
     new SesameResultAdapter(tupleQuery.evaluate)
   }
 }
 
-
-//String endpointURL = "http://dbpedia.org/sparql";
-//HTTPRepository dbpediaEndpoint = 
-//         new HTTPRepository(endpointURL, "");
-//dbpediaEndpoint.initialize();
-//
-//RepositoryConnection conn = 
-//         dbpediaEndpoint.getConnection();
-//try {
-//  String sparqlQuery = 
-//         " SELECT * WHERE {?X ?P ?Y} LIMIT 10 ";
-//  TupleQuery query = conn.prepareTupleQuery(SPARQL, query);
-//  TupleQueryResult result = query.evaluate();
-//
-//  while (result.hasNext()) {
-//      ... // do something linked and open
-//  }
-//}
-//finally {
-//  conn.close();
-//}
-
-class SesameResultAdapter(val i: TupleQueryResult) extends Traversable[Bindings] {
-  def foreach[U](f: (Bindings) => U) = while (i.hasNext) f(new SesameBindingsAdapter(i.next))
+class SesameResultAdapter(val i: TupleQueryResult) extends Iterable[Bindings] {
+  def iterator = new Iterator[Bindings] {
+    def next = new SesameBindingsAdapter(i.next)
+    def hasNext = i.hasNext
+  }
 }
 
 class SesameBindingsAdapter(val i: BindingSet) extends Bindings {

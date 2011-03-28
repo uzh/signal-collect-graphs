@@ -19,10 +19,6 @@
 
 package signalcollect.graphproviders
 
-trait SparqlAccessor {
-  def execute(query: String): Traversable[Bindings]
-}
-
 trait Bindings {
   def get(s: String): Option[String]
 }

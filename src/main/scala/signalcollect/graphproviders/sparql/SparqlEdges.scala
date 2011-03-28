@@ -26,7 +26,7 @@ case class RdfId(val iris: scala.collection.immutable.List[String]) {
 }
 
 class SparqlEdges(
-  val db: SparqlAccessor,
+  val db: SparqlEndpoint,
   val edgeQueries: List[String],
   val sourceBindingNames: List[String] = List("source"),
   val targetBindingNames: List[String] = List("target")
