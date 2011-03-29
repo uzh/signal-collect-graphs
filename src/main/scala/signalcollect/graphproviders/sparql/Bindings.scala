@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders
+package signalcollect.graphproviders.sparql
 
 trait Bindings {
   def get(s: String): Option[String]

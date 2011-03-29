@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders
+package signalcollect.graphproviders.sparql
 
 trait SparqlEndpoint {
   def execute(query: String): Iterable[Bindings]

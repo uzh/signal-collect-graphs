@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders
+package signalcollect.graphproviders.sparql
 
 import scala.collection.mutable.ArrayBuffer
 
