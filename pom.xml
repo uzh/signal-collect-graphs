@@ -120,7 +120,7 @@
 		<project.reporting.outputEncoding>
 			UTF-8
         </project.reporting.outputEncoding>
-		<scala.version>2.9.0</scala.version>
+		<scala.version>2.9.0-1</scala.version>
 	</properties>
 	<name>graph-providers</name>
 </project>
