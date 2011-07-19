@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.synthetic
 
 class Star(val vertices: Int, symmetric: Boolean = false) extends Traversable[(Int, Int)] {
 

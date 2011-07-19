@@ -17,29 +17,25 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.synthetic
 
-import scala.math._
-import scala.util.Random
-
-class LogNormal(vertices: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends Traversable[(Int, Int)] {
+class BinaryTree(val vertices: Int, inverted: Boolean = false) extends Traversable[(Int, Int)] {
 
   def foreach[U](f: ((Int, Int)) => U) = {
-    val r = new Random(seed)
-    var i = 0
-    while (i < vertices) {
-      val from = i
-      val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
-      var j = 0
-      while (j < outDegree) {
-        val to = ((r.nextDouble * (vertices - 1))).round.toInt
-        if (from != to) {
-          f(from, to)
-          j += 1
-        }
+    var i = 1
+    while (2 * i - 1 < vertices) {
+      if (inverted)
+        f((2 * i - 1, i - 1))
+      else
+        f((i - 1, 2 * i - 1))
+      if (2 * i < vertices) {
+        if (inverted)
+          f((2 * i, i - 1))
+        else
+          f((i - 1, 2 * i))
       }
+
       i += 1
     }
   }
-
 }

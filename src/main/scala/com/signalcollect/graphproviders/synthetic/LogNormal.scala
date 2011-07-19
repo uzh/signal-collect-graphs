@@ -17,12 +17,12 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.synthetic
 
 import scala.math._
 import scala.util.Random
 
-class Partitions(partitions: Int, vertices: Int, seed: Long, sigma: Double = 1, mu: Double = 3, symmetric: Boolean = false) extends Traversable[(Int, Int)] {
+class LogNormal(vertices: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends Traversable[(Int, Int)] {
 
   def foreach[U](f: ((Int, Int)) => U) = {
     val r = new Random(seed)
@@ -33,10 +33,8 @@ class Partitions(partitions: Int, vertices: Int, seed: Long, sigma: Double = 1, 
       var j = 0
       while (j < outDegree) {
         val to = ((r.nextDouble * (vertices - 1))).round.toInt
-        if (from != to && (to % partitions == from % partitions)) {
+        if (from != to) {
           f(from, to)
-          if (symmetric)
-        	f(to, from)
           j += 1
         }
       }

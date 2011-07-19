@@ -17,21 +17,17 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.synthetic
 
-class Grid(val width: Int, height: Int) extends Traversable[(Int, Int)] {
+class Chain(val vertices: Int, symmetric: Boolean = false) extends Traversable[(Int, Int)] {
 
   def foreach[U](f: ((Int, Int)) => U) = {
-	  val max = width*height
-	  for (n <- 1 to max) {
-	 	if (n + width <= max) {
-	 		f(n, n+width)
-	 		f(n+width, n)
-	 	}
-	 	if (n % height != 0) {
-	 		f(n, n+1)
-	 		f(n+1, n)
-	 	}
-	  }
+    var i = 0
+    while (i < vertices) {
+      f((i, i + 1))
+      if (symmetric)
+    	  f((i + 1, i))
+      i += 1
+    }
   }
 }

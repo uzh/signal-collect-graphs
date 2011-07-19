@@ -17,16 +17,8 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.sparql
 
-class FullyConnected(val vertices: Int) extends Traversable[(Int, Int)] {
-
-  def foreach[U](f: ((Int, Int)) => U) = {
-    for (i <- 0 to vertices) {
-    	for (j <- 0 until i) {
-    		f((i, j))
-    		f((j, i))
-    	}
-    }
-  }
+trait SparqlEndpoint {
+  def execute(query: String): Iterable[Bindings]
 }

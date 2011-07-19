@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders.parsers
+package com.signalcollect.graphproviders.parsers
 
 import java.io.File
 import java.io.FileReader

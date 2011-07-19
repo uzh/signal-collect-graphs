@@ -17,17 +17,8 @@
  *  
  */
 
-package signalcollect.graphproviders.synthetic
+package com.signalcollect.graphproviders.sparql
 
-class Chain(val vertices: Int, symmetric: Boolean = false) extends Traversable[(Int, Int)] {
-
-  def foreach[U](f: ((Int, Int)) => U) = {
-    var i = 0
-    while (i < vertices) {
-      f((i, i + 1))
-      if (symmetric)
-    	  f((i + 1, i))
-      i += 1
-    }
-  }
+trait Bindings {
+  def get(s: String): Option[String]
 }

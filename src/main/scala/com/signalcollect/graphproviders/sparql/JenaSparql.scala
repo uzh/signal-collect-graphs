@@ -17,7 +17,7 @@
  *  
  */
 
-package signalcollect.graphproviders.sparql
+package com.signalcollect.graphproviders.sparql
 
 import com.hp.hpl.jena.query.QuerySolution
 import com.hp.hpl.jena.query.ResultSet
