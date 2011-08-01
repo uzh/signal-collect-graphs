@@ -5,6 +5,7 @@
 	<groupId>com.signalcollect</groupId>
 	<artifactId>graph-providers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>Signal/Collect Graph-Providers</name>
 	<repositories>
 		<repository>
 			<id>scala-tools.org</id>
@@ -71,6 +72,10 @@
 					</execution>
 				</executions>
 			</plugin>
+		</plugins>
+	</build>
+	<reporting>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -86,7 +91,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+	</reporting>
 	<properties>
 		<project.build.sourceEncoding>
 			UTF-8
@@ -97,5 +102,4 @@
         </project.reporting.outputEncoding>
 		<scala.version>2.9.0-1</scala.version>
 	</properties>
-	<name>graph-providers</name>
 </project>
