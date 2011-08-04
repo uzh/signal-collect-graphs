@@ -65,17 +65,21 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>compile</id>
 						<goals>
 							<goal>compile</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>test-compile</id>
+						<goals>
 							<goal>testCompile</goal>
 						</goals>
+						<phase>test-compile</phase>
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
-	</build>
-	<reporting>
-		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -91,12 +95,11 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 	<properties>
 		<project.build.sourceEncoding>
 			UTF-8
         </project.build.sourceEncoding>
-
 		<project.reporting.outputEncoding>
 			UTF-8
         </project.reporting.outputEncoding>
