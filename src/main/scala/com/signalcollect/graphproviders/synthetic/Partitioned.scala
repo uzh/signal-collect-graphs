@@ -33,7 +33,7 @@ class Partitions(partitions: Int, vertices: Int, seed: Long, sigma: Double = 1, 
       var j = 0
       while (j < outDegree) {
         val to = ((r.nextDouble * (vertices - 1))).round.toInt
-        if (from != to && (to % partitions == from % partitions)) {
+        if (from != to && (to.hashCode % partitions == from.hashCode % partitions)) {
           f(from, to)
           if (symmetric)
         	f(to, from)
