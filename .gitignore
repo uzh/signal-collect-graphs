@@ -1,1 +1,14 @@
-.settings
+
+.cache
+
+.classpath
+
+.project
+
+.scala_dependencies
+
+.settings/*
+
+target/*
+
+*.config
