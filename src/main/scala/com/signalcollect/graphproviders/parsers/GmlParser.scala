@@ -37,16 +37,16 @@ object Main {
   def main(args: Array[String]): Unit = {
     val parser = new GmlParser
     val f = new File("karate.gml")
-    val graphs: List[Graph] = parser.parse(f)
+    val graphs: List[GmlGraph] = parser.parse(f)
     println(graphs)
   }
 }
 
-abstract class Graph(nodes: List[Node], edges: List[Edge])
-case class DirectedGraph(nodes: List[Node], edges: List[Edge]) extends Graph(nodes, edges)
-case class UndirectedGraph(nodes: List[Node], edges: List[Edge]) extends Graph(nodes, edges)
+abstract class GmlGraph(nodes: List[Node], edges: List[GmlEdge])
+case class DirectedGraph(nodes: List[Node], edges: List[GmlEdge]) extends GmlGraph(nodes, edges)
+case class UndirectedGraph(nodes: List[Node], edges: List[GmlEdge]) extends GmlGraph(nodes, edges)
 case class Node(id: Int, label: String, value: String)
-case class Edge(source: Int, target: Int)
+case class GmlEdge(source: Int, target: Int)
 
 /*
  * @author Philip Stutz
@@ -60,11 +60,11 @@ class GmlParser extends StdTokenParsers
   lexical.delimiters ++= List("=", "[", "]","{", "}", ",", "//", "(", ")", "\n", "\r")
   lexical.reserved ++= List("graph", "node", "edge", "id", "source", "target", "label", "value", "directed", "Creator")
   
-  lazy val gmlFile: Parser[List[Graph]] = {
+  lazy val gmlFile: Parser[List[GmlGraph]] = {
     opt("Creator"~stringLit)~>rep(graph)
   }
   
-  lazy val graph: Parser[Graph] = {
+  lazy val graph: Parser[GmlGraph] = {
     "graph"~"["~>opt("directed"~>bool)~rep(node)~rep(edge)<~"]" ^^ {
       case optDirected~nodes~edges => {
           val directed = optDirected.getOrElse(true)
@@ -99,17 +99,17 @@ class GmlParser extends StdTokenParsers
     "value"~>(ident|stringLit)
   }
 
-  lazy val edge: Parser[Edge] = {
+  lazy val edge: Parser[GmlEdge] = {
     "edge"~"["~>id~id<~"]" ^^ {
-      case source~target => Edge(source, target)
+      case source~target => GmlEdge(source, target)
     }
   }
 
-  def parse(s: String): List[Graph] = {
+  def parse(s: String): List[GmlGraph] = {
     parse(new lexical.Scanner(s))
   }
 
-  def parse(f: File): List[Graph] = {
+  def parse(f: File): List[GmlGraph] = {
     val javaReader = new FileReader(f)
     //Source.fromFile(...).mkString
     val scalaReader: Reader[Char] = StreamReader(javaReader)
@@ -117,7 +117,7 @@ class GmlParser extends StdTokenParsers
     parse(scanner)
   }
 
-  def parse(tokens: lexical.Scanner): List[Graph] = {
+  def parse(tokens: lexical.Scanner): List[GmlGraph] = {
     phrase(gmlFile)(tokens) match {
       case Success(g, next) => g
       case NoSuccess(msg, next) => throw new ParseException(msg + "\nNext position: (line: " + next.pos.line + ", column: " + next.pos.column + ")" + "\nNext token: " + next.rest.first)

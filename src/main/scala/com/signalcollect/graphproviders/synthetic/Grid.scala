@@ -19,8 +19,31 @@
 
 package com.signalcollect.graphproviders.synthetic
 
-class Grid(val width: Int, height: Int) extends Traversable[(Int, Int)] {
+import com.signalcollect.graphproviders.GraphProvider
+import com.signalcollect._
 
+class Grid(val width: Int, height: Int) extends GraphProvider with Traversable[(Int, Int)] {
+
+  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
+    val graph = builder.build
+    val max = width * height
+
+    for (id <- 1 to max) {
+    	graph.addVertex(vertexBuilder(id))
+    }
+    for (n <- 1 to max) {
+      if (n + width <= max) {
+        graph.addEdge(edgeBuilder(n, n + width))
+        graph.addEdge(edgeBuilder(n + width, n))
+      }
+      if (n % height != 0) {
+        graph.addEdge(edgeBuilder(n, n + 1))
+        graph.addEdge(edgeBuilder(n + 1, n))
+      }
+    }
+    graph
+  }
+  
   def foreach[U](f: ((Int, Int)) => U) = {
 	  val max = width*height
 	  for (n <- 1 to max) {

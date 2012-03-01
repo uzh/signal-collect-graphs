@@ -19,8 +19,33 @@
 
 package com.signalcollect.graphproviders.synthetic
 
-class BinaryTree(val vertices: Int, inverted: Boolean = false) extends Traversable[(Int, Int)] {
+import com.signalcollect._
+import com.signalcollect.graphproviders.GraphProvider
 
+class BinaryTree(val vertices: Int, inverted: Boolean = false) extends GraphProvider with Traversable[(Int, Int)] {
+
+  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
+    val graph = builder.build
+    for (j <- 0 until vertices) {
+      graph.addVertex(vertexBuilder(j))
+    }
+    var i = 1
+    while (2 * i - 1 < vertices) {
+      if (inverted)
+        graph.addEdge(edgeBuilder(2 * i - 1, i - 1))
+      else
+        graph.addEdge(edgeBuilder(i - 1, 2 * i - 1))
+      if (2 * i < vertices) {
+        if (inverted)
+          graph.addEdge(edgeBuilder(2 * i, i - 1))
+        else
+          graph.addEdge(edgeBuilder(i - 1, 2 * i))
+      }
+      i += 1
+    }
+    graph
+  }
+  
   def foreach[U](f: ((Int, Int)) => U) = {
     var i = 1
     while (2 * i - 1 < vertices) {

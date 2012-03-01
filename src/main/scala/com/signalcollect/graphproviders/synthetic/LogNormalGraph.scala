@@ -1,5 +1,4 @@
 /*
- *  @author Philip Stutz
  *  @author Daniel Strebel
  *  
  *  Copyright 2012 University of Zurich
@@ -21,31 +20,52 @@
 package com.signalcollect.graphproviders.synthetic
 
 import com.signalcollect._
+import scala.util.Random
+import scala.math._
 import graphproviders.GraphProvider
 
-class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider with Traversable[(Int, Int)] {
+class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider with Traversable[(Int, Int)] {
 
   def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
     val graph = builder.build
-
     for (id <- (0 until graphSize).par) {
       graph.addVertex(vertexBuilder(id))
     }
 
-    for (i <- (0 until graphSize - 1)) {
-      graph.addEdge(edgeBuilder(i, i + 1))
-    }
+    val r = new Random(seed)
 
+    for (i <- (0 until graphSize).par) {
+      val from = i
+      val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
+      var j = 0
+      while (j < outDegree) {
+        val to = ((r.nextDouble * (graphSize - 1))).round.toInt
+        if (from != to) {
+          graph.addEdge(edgeBuilder(from, to))
+          j += 1
+        }
+      }
+    }
     graph
   }
 
   def foreach[U](f: ((Int, Int)) => U) = {
+    val r = new Random(seed)
     var i = 0
     while (i < graphSize) {
-      f((i, i + 1))
-      if (symmetric)
-        f((i + 1, i))
+      val from = i
+      val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
+      var j = 0
+      while (j < outDegree) {
+        val to = ((r.nextDouble * (graphSize - 1))).round.toInt
+        if (from != to) {
+          f(from, to)
+          j += 1
+        }
+      }
       i += 1
     }
   }
+
+  override def toString = "LogNormal(" + graphSize + ", " + seed + ", " + sigma + ", " + mu + ")"
 }

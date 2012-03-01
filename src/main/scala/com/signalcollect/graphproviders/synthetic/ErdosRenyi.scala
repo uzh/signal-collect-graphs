@@ -21,13 +21,32 @@ package com.signalcollect.graphproviders.synthetic
 
 import scala.math._
 import scala.util.Random
+import com.signalcollect._
+import com.signalcollect.graphproviders.GraphProvider
 
 /**
  *  Vertices are randomly connected, each possible edge gets chosen with probability edgeProbability
  *  See http://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
  */
-class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends Traversable[(Int, Int)] {
+class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends GraphProvider with Traversable[(Int, Int)] {
 
+  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
+    val graph = builder.build
+    for (id <- (0 to vertices).par) {
+      graph.addVertex(vertexBuilder(id))
+    }
+    
+    val r = new Random(0)
+    for (from <- (0 to vertices).par) {
+      for (to <- (0 to vertices).par) {
+        if (from != to && r.nextDouble > edgeProbability) {
+          graph.addEdge(edgeBuilder(from, to))
+        }
+      }
+    }
+    graph
+  }
+  
   def foreach[U](f: ((Int, Int)) => U) = {
     val r = new Random(0)
     for (from <- (0 to vertices).par) {
@@ -38,5 +57,4 @@ class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends Traver
       }
     }
   }
-
 }
