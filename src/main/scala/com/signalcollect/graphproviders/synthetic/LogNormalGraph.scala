@@ -23,6 +23,8 @@ import com.signalcollect._
 import scala.util.Random
 import scala.math._
 import graphproviders.GraphProvider
+import java.io.PrintWriter
+import java.io.FileWriter
 
 class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider with Traversable[(Int, Int)] {
 
@@ -68,4 +70,26 @@ class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Doub
   }
 
   override def toString = "LogNormal(" + graphSize + ", " + seed + ", " + sigma + ", " + mu + ")"
+}
+
+object LogNormalGraph extends App {
+  val numberOfVertices = 200000
+  val sigma = 1
+  val mu = 1
+  val graph = new LogNormalGraph(numberOfVertices, 0, sigma, mu)
+  val vertexWriter = new PrintWriter(new FileWriter("./lognormal-vertices" + numberOfVertices + "-sigma" + sigma + "-mu" + mu))
+  for (i <- 0 until numberOfVertices) {
+    vertexWriter.write(i + "\n")
+  }
+  vertexWriter.close
+  val numberOfEdges = graph.size
+  val edgeWriter = new PrintWriter(new FileWriter("./lognormal-edges" + numberOfEdges + "-sigma" + sigma + "-mu" + mu))
+  graph.foreach(tuple => {
+    tuple match {
+      case (source, target) => {
+        edgeWriter.write(source + "," + target + "\n")
+      }
+    }
+  })
+  edgeWriter.close
 }
