@@ -1,5 +1,6 @@
 /*
  *  @author Daniel Strebel
+ *  @author Philip Stutz
  *  
  *  Copyright 2012 University of Zurich
  *      
@@ -22,6 +23,6 @@ package com.signalcollect.graphproviders
 
 import com.signalcollect._
 
-trait GraphProvider extends Serializable {
-	def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge): Graph
+trait GraphProvider[VertexId] extends Serializable {
+	def populate(graph: Graph, vertexBuilder: VertexId => Vertex[_, _], edgeBuilder: (VertexId, VertexId) => Edge[_])
 }

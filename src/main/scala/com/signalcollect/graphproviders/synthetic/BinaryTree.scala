@@ -22,30 +22,32 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect._
 import com.signalcollect.graphproviders.GraphProvider
 
-class BinaryTree(val vertices: Int, inverted: Boolean = false) extends GraphProvider with Traversable[(Int, Int)] {
+class BinaryTree(val vertices: Int, inverted: Boolean = false) extends GraphProvider[Int] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (j <- 0 until vertices) {
       graph.addVertex(vertexBuilder(j))
     }
     var i = 1
     while (2 * i - 1 < vertices) {
+      val sourceId = 2 * i - 1
+      val targetId = i - 1
       if (inverted)
-        graph.addEdge(edgeBuilder(2 * i - 1, i - 1))
+        graph.addEdge(targetId, edgeBuilder(targetId, sourceId))
       else
-        graph.addEdge(edgeBuilder(i - 1, 2 * i - 1))
+        graph.addEdge(sourceId, edgeBuilder(sourceId, targetId))
       if (2 * i < vertices) {
+        val sourceId = i - 1
+        val targetId = 2 * i
         if (inverted)
-          graph.addEdge(edgeBuilder(2 * i, i - 1))
+          graph.addEdge(targetId, edgeBuilder(targetId, sourceId))
         else
-          graph.addEdge(edgeBuilder(i - 1, 2 * i))
+          graph.addEdge(sourceId, edgeBuilder(sourceId, targetId))
       }
       i += 1
     }
-    graph
   }
-  
+
   def foreach[U](f: ((Int, Int)) => U) = {
     var i = 1
     while (2 * i - 1 < vertices) {

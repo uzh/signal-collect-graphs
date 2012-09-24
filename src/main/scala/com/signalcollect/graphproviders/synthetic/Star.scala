@@ -22,18 +22,16 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect.graphproviders.GraphProvider
 import com.signalcollect._
 
-class Star(val vertices: Int, symmetric: Boolean = false) extends GraphProvider with Traversable[(Int, Int)] {
+class Star(val vertices: Int, symmetric: Boolean = false) extends GraphProvider[Int] with Traversable[(Int, Int)] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     graph.addVertex(vertexBuilder(0))
     for (i <- 1 to vertices) {
       graph.addVertex(vertexBuilder(i))
-      graph.addEdge(edgeBuilder(i, 0))
+      graph.addEdge(i, edgeBuilder(i, 0))
       if (symmetric)
-        graph.addEdge(edgeBuilder(0, i))
+        graph.addEdge(0, edgeBuilder(0, i))
     }
-    graph
   }
   
   def foreach[U](f: ((Int, Int)) => U) = {

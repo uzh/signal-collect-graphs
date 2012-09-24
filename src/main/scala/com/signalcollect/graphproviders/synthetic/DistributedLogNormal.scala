@@ -23,9 +23,8 @@ import scala.util.Random
 import scala.math._
 import graphproviders.GraphProvider
 
-class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider {
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int] {
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     val r = new Random(seed)
 
     val workers = numberOfWorkers.getOrElse(24)
@@ -56,7 +55,7 @@ class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, 
           while (j < outDegree) {
             val to = ((r.nextDouble * (graphSize - 1))).round.toInt
             if (vertexId != to) {
-              graph.addEdge(edgeBuilder(vertexId, to))
+              graph.addEdge(vertexId, edgeBuilder(vertexId, to))
               j += 1
             }
           }
@@ -65,7 +64,6 @@ class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, 
     }
 
     graph.awaitIdle
-    graph
   }
 
   override def toString = "Distrubuted LogNormal(" + graphSize + ", " + numberOfWorkers + ", " + seed + ", " + sigma + ", " + mu + ")"

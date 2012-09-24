@@ -23,29 +23,15 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect._
 import graphproviders.GraphProvider
 
-class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider with Traversable[(Int, Int)] {
+class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider[Int] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
-
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 until graphSize).par) {
       graph.addVertex(vertexBuilder(id))
     }
-
     for (i <- (0 until graphSize - 1)) {
-      graph.addEdge(edgeBuilder(i, i + 1))
-    }
-
-    graph
-  }
-
-  def foreach[U](f: ((Int, Int)) => U) = {
-    var i = 0
-    while (i < graphSize) {
-      f((i, i + 1))
-      if (symmetric)
-        f((i + 1, i))
-      i += 1
+      graph.addEdge(i, edgeBuilder(i, i + 1))
     }
   }
+
 }

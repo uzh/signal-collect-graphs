@@ -22,10 +22,9 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect.graphproviders.GraphProvider
 import com.signalcollect._
 
-class Grid(val width: Int, height: Int) extends GraphProvider with Traversable[(Int, Int)] {
+class Grid(val width: Int, height: Int) extends GraphProvider[Int] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     val max = width * height
 
     for (id <- 1 to max) {
@@ -33,28 +32,14 @@ class Grid(val width: Int, height: Int) extends GraphProvider with Traversable[(
     }
     for (n <- 1 to max) {
       if (n + width <= max) {
-        graph.addEdge(edgeBuilder(n, n + width))
-        graph.addEdge(edgeBuilder(n + width, n))
+        graph.addEdge(n, edgeBuilder(n, n + width))
+        graph.addEdge(n + width, edgeBuilder(n + width, n))
       }
       if (n % height != 0) {
-        graph.addEdge(edgeBuilder(n, n + 1))
-        graph.addEdge(edgeBuilder(n + 1, n))
+        graph.addEdge(n, edgeBuilder(n, n + 1))
+        graph.addEdge(n + 1, edgeBuilder(n + 1, n))
       }
     }
-    graph
   }
-  
-  def foreach[U](f: ((Int, Int)) => U) = {
-	  val max = width*height
-	  for (n <- 1 to max) {
-	 	if (n + width <= max) {
-	 		f(n, n+width)
-	 		f(n+width, n)
-	 	}
-	 	if (n % height != 0) {
-	 		f(n, n+1)
-	 		f(n+1, n)
-	 	}
-	  }
-  }
+
 }

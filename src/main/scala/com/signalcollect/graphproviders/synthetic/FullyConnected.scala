@@ -22,28 +22,18 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect._
 import com.signalcollect.graphproviders.GraphProvider
 
-class FullyConnected(val vertices: Int) extends GraphProvider with Traversable[(Int, Int)] {
+class FullyConnected(val vertices: Int) extends GraphProvider[Int] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 to vertices).par) {
       graph.addVertex(vertexBuilder(id))
     }
     for (i <- 0 to vertices) {
       for (j <- 0 until i) {
-        graph.addEdge(edgeBuilder(i, j))
-        graph.addEdge(edgeBuilder(j, i))
+        graph.addEdge(i, edgeBuilder(i, j))
+        graph.addEdge(j, edgeBuilder(j, i))
       }
     }
-    graph
   }
 
-  def foreach[U](f: ((Int, Int)) => U) = {
-    for (i <- 0 to vertices) {
-      for (j <- 0 until i) {
-        f((i, j))
-        f((j, i))
-      }
-    }
-  }
 }

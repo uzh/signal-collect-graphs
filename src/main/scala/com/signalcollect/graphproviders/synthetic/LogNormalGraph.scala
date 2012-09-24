@@ -26,10 +26,9 @@ import graphproviders.GraphProvider
 import java.io.PrintWriter
 import java.io.FileWriter
 
-class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider with Traversable[(Int, Int)] {
+class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int] with Traversable[(Int, Int)] {
 
-  def populateGraph(builder: GraphBuilder, vertexBuilder: (Any) => Vertex, edgeBuilder: (Any, Any) => Edge) = {
-    val graph = builder.build
+  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 until graphSize).par) {
       graph.addVertex(vertexBuilder(id))
     }
@@ -43,12 +42,11 @@ class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Doub
       while (j < outDegree) {
         val to = ((r.nextDouble * (graphSize - 1))).round.toInt
         if (from != to) {
-          graph.addEdge(edgeBuilder(from, to))
+          graph.addEdge(from, edgeBuilder(from, to))
           j += 1
         }
       }
     }
-    graph
   }
 
   def foreach[U](f: ((Int, Int)) => U) = {
@@ -82,7 +80,7 @@ object LogNormalGraph extends App {
     vertexWriter.write(i + "\n")
   }
   vertexWriter.close
-  val numberOfEdges = graph.size
+  val numberOfEdges = graph.size // Inefficient, traverses twice.
   val edgeWriter = new PrintWriter(new FileWriter("./lognormal-edges" + numberOfEdges + "-sigma" + sigma + "-mu" + mu))
   graph.foreach(tuple => {
     tuple match {
