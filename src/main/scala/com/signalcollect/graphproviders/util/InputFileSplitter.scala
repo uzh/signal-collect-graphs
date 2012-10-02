@@ -41,7 +41,7 @@ object InputFileSplitter extends App {
   val outputFilePrefix = "input"
   val outputFileExtension = ".txt"
   val tempDir = None : Option[String]//Some("/path/to/temp/folder")
-  val numberOfSplits = 240
+  val numberOfSplits = 3840
   val statusLoggerFile: Option[String] = Some("/path/to/status/.txt")
   
   val splitterCriteria: (String) => Int = (inputString) => { //determines to which split a line in the input file belongs
