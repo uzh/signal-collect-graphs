@@ -24,25 +24,25 @@ import com.signalcollect.graphproviders.GraphProvider
 
 class BinaryTree(val vertices: Int, inverted: Boolean = false) extends GraphProvider[Int] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (j <- 0 until vertices) {
-      graph.addVertex(vertexBuilder(j))
+      graphEditor.addVertex(vertexBuilder(j))
     }
     var i = 1
     while (2 * i - 1 < vertices) {
       val sourceId = 2 * i - 1
       val targetId = i - 1
       if (inverted)
-        graph.addEdge(targetId, edgeBuilder(targetId, sourceId))
+        graphEditor.addEdge(targetId, edgeBuilder(targetId, sourceId))
       else
-        graph.addEdge(sourceId, edgeBuilder(sourceId, targetId))
+        graphEditor.addEdge(sourceId, edgeBuilder(sourceId, targetId))
       if (2 * i < vertices) {
         val sourceId = i - 1
         val targetId = 2 * i
         if (inverted)
-          graph.addEdge(targetId, edgeBuilder(targetId, sourceId))
+          graphEditor.addEdge(targetId, edgeBuilder(targetId, sourceId))
         else
-          graph.addEdge(sourceId, edgeBuilder(sourceId, targetId))
+          graphEditor.addEdge(sourceId, edgeBuilder(sourceId, targetId))
       }
       i += 1
     }

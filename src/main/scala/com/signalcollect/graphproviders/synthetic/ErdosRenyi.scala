@@ -30,16 +30,16 @@ import com.signalcollect.graphproviders.GraphProvider
  */
 class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends GraphProvider[Int] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 to vertices).par) {
-      graph.addVertex(vertexBuilder(id))
+      graphEditor.addVertex(vertexBuilder(id))
     }
     
     val r = new Random(0)
     for (from <- (0 to vertices).par) {
       for (to <- (0 to vertices).par) {
         if (from != to && r.nextDouble > edgeProbability) {
-          graph.addEdge(from, edgeBuilder(from, to))
+          graphEditor.addEdge(from, edgeBuilder(from, to))
         }
       }
     }

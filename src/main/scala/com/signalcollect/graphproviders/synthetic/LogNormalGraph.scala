@@ -28,9 +28,9 @@ import java.io.FileWriter
 
 class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int] with Traversable[(Int, Int)] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 until graphSize).par) {
-      graph.addVertex(vertexBuilder(id))
+      graphEditor.addVertex(vertexBuilder(id))
     }
 
     val r = new Random(seed)
@@ -42,7 +42,7 @@ class LogNormalGraph(graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Doub
       while (j < outDegree) {
         val to = ((r.nextDouble * (graphSize - 1))).round.toInt
         if (from != to) {
-          graph.addEdge(from, edgeBuilder(from, to))
+          graphEditor.addEdge(from, edgeBuilder(from, to))
           j += 1
         }
       }

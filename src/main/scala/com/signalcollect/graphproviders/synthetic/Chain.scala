@@ -25,12 +25,12 @@ import graphproviders.GraphProvider
 
 class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider[Int] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 until graphSize).par) {
-      graph.addVertex(vertexBuilder(id))
+      graphEditor.addVertex(vertexBuilder(id))
     }
     for (i <- (0 until graphSize - 1)) {
-      graph.addEdge(i, edgeBuilder(i, i + 1))
+      graphEditor.addEdge(i, edgeBuilder(i, i + 1))
     }
   }
 

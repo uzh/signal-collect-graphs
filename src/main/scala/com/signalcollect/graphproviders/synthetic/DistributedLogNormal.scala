@@ -21,10 +21,10 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect._
 import scala.util.Random
 import scala.math._
-import graphproviders.GraphProvider
+import com.signalcollect.graphproviders.GraphProvider
 
 class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int] {
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     val r = new Random(seed)
 
     val workers = numberOfWorkers.getOrElse(24)
@@ -36,8 +36,8 @@ class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, 
         vertexIdHint = Some(worker)
       }
       for (vertexId <- worker.until(graphSize).by(workers)) {
-        graph.loadGraph(vertexIdHint, graph => {
-          graph.addVertex(vertexBuilder(vertexId))
+        graphEditor.loadGraph(vertexIdHint, graph => {
+          graphEditor.addVertex(vertexBuilder(vertexId))
         })
       }
     }
@@ -49,7 +49,7 @@ class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, 
         vertexIdHint = Some(worker)
       }
       for (vertexId <- worker.until(graphSize).by(workers)) {
-        graph.loadGraph(vertexIdHint, graph => {
+        graphEditor.loadGraph(vertexIdHint, graph => {
           val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
           var j = 0
           while (j < outDegree) {
@@ -62,8 +62,6 @@ class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, 
         })
       }
     }
-
-    graph.awaitIdle
   }
 
   override def toString = "Distrubuted LogNormal(" + graphSize + ", " + numberOfWorkers + ", " + seed + ", " + sigma + ", " + mu + ")"

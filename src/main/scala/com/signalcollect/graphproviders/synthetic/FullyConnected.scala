@@ -24,14 +24,14 @@ import com.signalcollect.graphproviders.GraphProvider
 
 class FullyConnected(val vertices: Int) extends GraphProvider[Int] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     for (id <- (0 to vertices).par) {
-      graph.addVertex(vertexBuilder(id))
+      graphEditor.addVertex(vertexBuilder(id))
     }
     for (i <- 0 to vertices) {
       for (j <- 0 until i) {
-        graph.addEdge(i, edgeBuilder(i, j))
-        graph.addEdge(j, edgeBuilder(j, i))
+        graphEditor.addEdge(i, edgeBuilder(i, j))
+        graphEditor.addEdge(j, edgeBuilder(j, i))
       }
     }
   }

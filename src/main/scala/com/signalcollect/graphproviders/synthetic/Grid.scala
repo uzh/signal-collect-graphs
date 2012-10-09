@@ -24,20 +24,20 @@ import com.signalcollect._
 
 class Grid(val width: Int, height: Int) extends GraphProvider[Int] {
 
-  def populate(graph: Graph, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
     val max = width * height
 
     for (id <- 1 to max) {
-    	graph.addVertex(vertexBuilder(id))
+    	graphEditor.addVertex(vertexBuilder(id))
     }
     for (n <- 1 to max) {
       if (n + width <= max) {
-        graph.addEdge(n, edgeBuilder(n, n + width))
-        graph.addEdge(n + width, edgeBuilder(n + width, n))
+        graphEditor.addEdge(n, edgeBuilder(n, n + width))
+        graphEditor.addEdge(n + width, edgeBuilder(n + width, n))
       }
       if (n % height != 0) {
-        graph.addEdge(n, edgeBuilder(n, n + 1))
-        graph.addEdge(n + 1, edgeBuilder(n + 1, n))
+        graphEditor.addEdge(n, edgeBuilder(n, n + 1))
+        graphEditor.addEdge(n + 1, edgeBuilder(n + 1, n))
       }
     }
   }
