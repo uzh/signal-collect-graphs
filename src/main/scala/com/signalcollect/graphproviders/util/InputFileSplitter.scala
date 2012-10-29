@@ -22,6 +22,7 @@ import java.io._
 import scala.sys.process._
 import java.text.SimpleDateFormat
 import java.util.Date
+import scala.language.postfixOps
 
 /**
  * Simple script to partition input files according to some splitting condition

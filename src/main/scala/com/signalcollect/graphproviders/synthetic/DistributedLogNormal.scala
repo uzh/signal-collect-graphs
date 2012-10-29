@@ -23,8 +23,8 @@ import scala.util.Random
 import scala.math._
 import com.signalcollect.graphproviders.GraphProvider
 
-class DistributedLogNormal(graphSize: Int, numberOfWorkers: Option[Int] = None, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int] {
-  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+class DistributedLogNormal[Signal](graphSize: Int, numberOfWorkers: Option[Int] = None, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int, Signal] {
+  def populate(graphEditor: GraphEditor[Int, Signal], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
     val r = new Random(seed)
 
     val workers = numberOfWorkers.getOrElse(24)

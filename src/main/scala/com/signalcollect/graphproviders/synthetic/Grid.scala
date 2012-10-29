@@ -22,9 +22,9 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect.graphproviders.GraphProvider
 import com.signalcollect._
 
-class Grid(val width: Int, height: Int) extends GraphProvider[Int] {
+class Grid(val width: Int, height: Int) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
     val max = width * height
 
     for (id <- 1 to max) {

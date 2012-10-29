@@ -28,9 +28,9 @@ import com.signalcollect.graphproviders.GraphProvider
  *  Vertices are randomly connected, each possible edge gets chosen with probability edgeProbability
  *  See http://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
  */
-class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends GraphProvider[Int] {
+class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
     for (id <- (0 to vertices).par) {
       graphEditor.addVertex(vertexBuilder(id))
     }

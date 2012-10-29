@@ -23,9 +23,9 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect._
 import graphproviders.GraphProvider
 
-class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider[Int] {
+class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
     for (id <- (0 until graphSize).par) {
       graphEditor.addVertex(vertexBuilder(id))
     }

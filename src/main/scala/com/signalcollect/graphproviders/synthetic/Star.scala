@@ -22,9 +22,9 @@ package com.signalcollect.graphproviders.synthetic
 import com.signalcollect.graphproviders.GraphProvider
 import com.signalcollect._
 
-class Star(val vertices: Int, symmetric: Boolean = false) extends GraphProvider[Int] with Traversable[(Int, Int)] {
+class Star(val vertices: Int, symmetric: Boolean = false) extends GraphProvider[Int, Any] with Traversable[(Int, Int)] {
 
-  def populate(graphEditor: GraphEditor, vertexBuilder: Int => Vertex[_, _], edgeBuilder: (Int, Int) => Edge[_]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
     graphEditor.addVertex(vertexBuilder(0))
     for (i <- 1 to vertices) {
       graphEditor.addVertex(vertexBuilder(i))
