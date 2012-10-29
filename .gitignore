@@ -1,4 +1,6 @@
 .*
 !/.gitignore
-
+project/target/
+project/project/
+project/scala*/
 target/*
