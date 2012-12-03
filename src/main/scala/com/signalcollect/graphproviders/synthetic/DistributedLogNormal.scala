@@ -36,9 +36,9 @@ class DistributedLogNormal[Signal](graphSize: Int, numberOfWorkers: Option[Int] 
         vertexIdHint = Some(worker)
       }
       for (vertexId <- worker.until(graphSize).by(workers)) {
-        graphEditor.loadGraph(vertexIdHint, graph => {
+        graphEditor.modifyGraph(graph => {
           graphEditor.addVertex(vertexBuilder(vertexId))
-        })
+        }, vertexIdHint)
       }
     }
 
@@ -49,7 +49,7 @@ class DistributedLogNormal[Signal](graphSize: Int, numberOfWorkers: Option[Int] 
         vertexIdHint = Some(worker)
       }
       for (vertexId <- worker.until(graphSize).by(workers)) {
-        graphEditor.loadGraph(vertexIdHint, graph => {
+        graphEditor.modifyGraph(graph => {
           val outDegree: Int = exp(mu + sigma * (r.nextGaussian)).round.toInt //log-normal
           var j = 0
           while (j < outDegree) {
@@ -59,7 +59,7 @@ class DistributedLogNormal[Signal](graphSize: Int, numberOfWorkers: Option[Int] 
               j += 1
             }
           }
-        })
+        }, vertexIdHint)
       }
     }
   }
