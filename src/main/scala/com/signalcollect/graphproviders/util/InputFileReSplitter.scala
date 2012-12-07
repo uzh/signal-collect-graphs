@@ -30,9 +30,13 @@ import java.util.Date
  */
 object InputFileReSplitter extends App {
   val numberOfSplits = 2880
-  val inputFileDirectory = "/home/user/strebel/webgraph/webgraph_bin_zip_288"
+  val inputFileDirectory = "/home/user/strebel/webgraph/webgraph_bin_zip"
   val outputFileDirectory = "/home/user/strebel/webgraph/webgraph_bin_zip_" + numberOfSplits
   val statusLoggerFile: Option[String] = Some("/home/user/strebel/status.txt")
+  
+  var verticesRead = 0
+  var verticesWriten = 0
+  var edgesWritten= 0l
 
   /**
    * ********
@@ -55,30 +59,31 @@ object InputFileReSplitter extends App {
     id % numberOfSplits
   }
 
-  def writeBuffer(buffer: Array[ArrayBuffer[String]]) {
+  def writeBuffer(buffer: Array[ArrayBuffer[Array[Int]]]) {
     for (i <- 0 until numberOfSplits) {
       val fileOut = new FileOutputStream(new File(outputFileDirectory + "/input_pt_" + i + ".txt"), true)
       val bufferedOut = new BufferedOutputStream(fileOut)
       val writer = new DataOutputStream(bufferedOut)
-      for (line <- buffer(i)) {
-        val splittedLine = line.split("\\s+")
-        val id = Integer.valueOf(splittedLine(0))
-        writer.writeInt(id);
-        val numberOfLinks = Integer.valueOf(splittedLine(1))
+      for (entry <- buffer(i)) {
+        verticesWriten+=1
+        writer.writeInt(entry(0))
+        val numberOfLinks = entry(1)
         writer.writeInt(numberOfLinks)
         for (link <- 0 until numberOfLinks) {
-          writer.writeInt(Integer.valueOf(splittedLine(link + 2)))
+          writer.writeInt(entry(link + 2))
         }
+        edgesWritten +=numberOfLinks
       }
       buffer(i).clear
       writer.flush
       writer.close
     }
+    logStatus("vertices written: " + verticesWriten + " edges: " + edgesWritten)
   }
 
-  val splitBuffer = new Array[ArrayBuffer[String]](numberOfSplits)
+  val splitBuffer = new Array[ArrayBuffer[Array[Int]]](numberOfSplits)
   for (i <- 0 until numberOfSplits) {
-    splitBuffer(i) = new ArrayBuffer[String]()
+    splitBuffer(i) = new ArrayBuffer[Array[Int]]()
   }
 
   val inputFolder = new File(inputFileDirectory)
@@ -94,14 +99,17 @@ object InputFileReSplitter extends App {
     try {
 
       while (true) {
+        
         val id = in.readInt
         val numberOfLinks = in.readInt
-        var inputLine = id + " " + numberOfLinks
+        val entry = new Array[Int](numberOfLinks+2)
+        entry(0)=id
+        entry(1)=numberOfLinks
         for (i <- 0 until numberOfLinks) {
-          inputLine += " " + in.readInt
+          entry(2+i) = in.readInt
         }
-        
-        splitBuffer(splitterCriteria(id))+=inputLine;
+        verticesRead+=1
+        splitBuffer(splitterCriteria(id))+=entry;
       }
 
 
@@ -112,10 +120,13 @@ object InputFileReSplitter extends App {
     in.close
     logStatus(inputFile.getAbsolutePath() + " read")
     count +=1
+
+    logStatus("Read " + count  + " splits, " + verticesRead + " vertices")
     
     if(count%5 == 0) {
       writeBuffer(splitBuffer);
       logStatus("Wrote Buffer for " + count + " splits")
+
     }
   }
   

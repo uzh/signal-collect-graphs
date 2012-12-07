@@ -28,6 +28,6 @@ import com.signalcollect.nodeprovisioning.torque.TorquePriority
 object RunSplitter extends App {
   val submitter = new TorqueJobSubmitter("strebel", 
       "strebel@ifi.uzh.ch", "kraken.ifi.uzh.ch", System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh" + System.getProperty("file.separator") + "id_rsa")
-  submitter.copyFileToCluster("target/signal-collect-graphs-2.0-SNAPSHOT.jar", "splitter.jar")
+  submitter.copyFileToCluster("target/signal-collect-graphs-assembly-2.0.0-SNAPSHOT.jar", "splitter.jar")
   submitter.runOnClusterNode("inputsplitter", "splitter.jar", "com.signalcollect.graphproviders.util.InputFileReSplitter", TorquePriority.fast, "-Xmx55G -Xms55G")
 }
