@@ -8,12 +8,12 @@ version := "2.1.0-SNAPSHOT"
 
 organization := "com.signalcollect"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
 EclipseKeys.withSource := true
 
 /** Dependencies */
 libraryDependencies ++= Seq(
- "org.scala-lang" % "scala-library" % "2.10.3"  % "compile",
- "org.apache.jena" % "jena-arq" % "2.10.0"
+ "org.scala-lang" % "scala-library" % "2.10.4"  % "compile",
+ "org.apache.jena" % "apache-jena-libs" % "2.11.1" % "compile"
   )
