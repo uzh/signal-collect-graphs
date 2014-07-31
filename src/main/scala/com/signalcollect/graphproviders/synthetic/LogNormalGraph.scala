@@ -28,7 +28,7 @@ import java.io.FileWriter
 
 class LogNormalGraph[Signal](graphSize: Int, seed: Long = 0, sigma: Double = 1, mu: Double = 3) extends GraphProvider[Int, Signal] with Traversable[(Int, Int)] {
 
-  def populate(graphEditor: GraphEditor[Int, Signal], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
+  def populate(graphEditor: GraphEditor[Int, Signal], vertexBuilder: Int => Vertex[Int, _, Int, Signal], edgeBuilder: (Int, Int) => Edge[Int]) {
     for (id <- (0 until graphSize).par) {
       graphEditor.addVertex(vertexBuilder(id))
     }
