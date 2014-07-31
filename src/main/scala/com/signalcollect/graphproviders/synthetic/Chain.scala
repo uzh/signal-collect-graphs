@@ -25,7 +25,7 @@ import graphproviders.GraphProvider
 
 class Chain(graphSize: Int, symmetric: Boolean = false) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _, Int, Any], edgeBuilder: (Int, Int) => Edge[Int]) {
     for (id <- (0 until graphSize).par) {
       graphEditor.addVertex(vertexBuilder(id))
     }

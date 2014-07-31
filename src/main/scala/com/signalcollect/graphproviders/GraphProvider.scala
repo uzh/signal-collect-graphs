@@ -24,5 +24,5 @@ package com.signalcollect.graphproviders
 import com.signalcollect._
 
 trait GraphProvider[VertexId, Signal] extends Serializable {
-	def populate(graphEditor: GraphEditor[VertexId, Signal], vertexBuilder: VertexId => Vertex[VertexId, _], edgeBuilder: (VertexId, VertexId) => Edge[VertexId])
+	def populate(graphEditor: GraphEditor[VertexId, Signal], vertexBuilder: VertexId => Vertex[VertexId, _, VertexId, Signal], edgeBuilder: (VertexId, VertexId) => Edge[VertexId])
 }

@@ -24,7 +24,7 @@ import com.signalcollect._
 
 class Grid(val width: Int, height: Int) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _, Int, Any], edgeBuilder: (Int, Int) => Edge[Int]) {
     val max = width * height
 
     for (id <- 1 to max) {

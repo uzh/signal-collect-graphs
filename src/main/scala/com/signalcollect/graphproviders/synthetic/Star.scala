@@ -24,7 +24,7 @@ import com.signalcollect._
 
 class Star(val vertices: Int, symmetric: Boolean = false) extends GraphProvider[Int, Any] with Traversable[(Int, Int)] {
 
-  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _, Int, Any], edgeBuilder: (Int, Int) => Edge[Int]) {
     graphEditor.addVertex(vertexBuilder(0))
     for (i <- 1 to vertices) {
       graphEditor.addVertex(vertexBuilder(i))

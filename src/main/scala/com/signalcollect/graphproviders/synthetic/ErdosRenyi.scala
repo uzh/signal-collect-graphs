@@ -30,7 +30,7 @@ import com.signalcollect.graphproviders.GraphProvider
  */
 class ErdosRenyi(vertices: Int, edgeProbability: Double = 0.0001) extends GraphProvider[Int, Any] {
 
-  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _], edgeBuilder: (Int, Int) => Edge[Int]) {
+  def populate(graphEditor: GraphEditor[Int, Any], vertexBuilder: Int => Vertex[Int, _, Int, Any], edgeBuilder: (Int, Int) => Edge[Int]) {
     for (id <- (0 until vertices).par) {
       graphEditor.addVertex(vertexBuilder(id))
     }
